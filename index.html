@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kompyuter qurilmalari</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#e8eef7;--card:#fff;--ink:#14213d;--mute:#4d5b78;--blue:#2f5bff;--yel:#ffc933;--line:#cfd9ea;--ok:#12a150;--bad:#e5484d;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1626;--card:#18233a;--ink:#eaf0ff;--mute:#9fb0d0;--blue:#6f8dff;--line:#2a3a5c}}
+:root[data-theme="dark"]{--bg:#0f1626;--card:#18233a;--ink:#eaf0ff;--mute:#9fb0d0;--blue:#6f8dff;--line:#2a3a5c}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 Inter,system-ui,sans-serif;display:flex;flex-direction:column}
+header{display:flex;align-items:center;gap:12px;padding:14px 20px}
+.bar{flex:1;height:6px;background:var(--line);border-radius:9px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--blue);transition:width .4s}
+.cnt{font-size:14px;color:var(--mute);min-width:44px;text-align:right}
+main{flex:1;overflow:auto;padding:8px 20px 20px;display:flex}
+.slide{margin:auto;width:100%;max-width:960px;animation:in .45s ease}
+@keyframes in{from{opacity:0;transform:translateX(28px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.slide{animation:none}.bar i{transition:none}}
+h1,h2{font-family:'Bricolage Grotesque',system-ui,sans-serif;line-height:1.08;margin:0 0 10px;letter-spacing:-.02em}
+h1{font-size:clamp(36px,8vw,76px);font-weight:800}
+h2{font-size:clamp(28px,5vw,46px);font-weight:800}
+.sub{color:var(--mute);margin:0 0 22px;max-width:60ch}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px}
+.dev{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px}
+.pic{height:96px;border-radius:12px;background:var(--yel);display:grid;place-items:center;font-size:56px;margin-bottom:12px}
+.dev:nth-child(even) .pic{background:var(--blue)}
+.dev b{display:block;font-size:19px;margin-bottom:4px}
+.dev span{color:var(--mute);font-size:15px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:640px){.two{grid-template-columns:1fr}}
+.big{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px}
+.big .pic{width:84px;height:84px;font-size:46px}
+.big h3{margin:0 0 6px;font-family:'Bricolage Grotesque',sans-serif;font-size:24px}
+.big p{margin:6px 0;color:var(--mute)}
+.row{display:flex;align-items:center;gap:12px;margin:12px 0}
+.row em{font-style:normal;width:150px;font-weight:600}
+.row .t{flex:1;height:26px;background:var(--line);border-radius:8px;overflow:hidden}
+.row .t i{display:block;height:100%;background:var(--blue);border-radius:8px;width:0;animation:g 1s .2s forwards}
+@keyframes g{to{width:var(--w)}}
+.q{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:14px}
+.q p{margin:0 0 10px;font-weight:600}
+.opt{display:block;width:100%;text-align:left;font:inherit;color:inherit;background:transparent;border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:6px 0;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--blue)}
+.opt.ok{background:var(--ok);border-color:var(--ok);color:#fff}
+.opt.bad{background:var(--bad);border-color:var(--bad);color:#fff}
+.score{font-family:'Bricolage Grotesque',sans-serif;font-size:28px;font-weight:800;min-height:40px}
+footer{display:flex;justify-content:space-between;gap:12px;padding:12px 20px 18px}
+.nav{font:600 16px Inter,sans-serif;border:0;border-radius:12px;padding:12px 26px;cursor:pointer;background:var(--blue);color:#fff}
+.nav.s{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.nav:disabled{opacity:.35;cursor:default}
+button:focus-visible{outline:3px solid var(--yel);outline-offset:2px}
+</style>
+</head>
+<body>
+<header><div class="bar"><i id="p"></i></div><div class="cnt" id="c"></div></header>
+<main><div class="slide" id="s"></div></main>
+<footer><button class="nav s" id="prev">Orqaga</button><button class="nav" id="next">Keyingisi</button></footer>
+<script>
+const dev=(e,n,t)=>`<div class="dev"><div class="pic" aria-hidden="true">${e}</div><b>${n}</b><span>${t}</span></div>`;
+const Q=[
+ ["Qaysi biri kiritish qurilmasi?",["Monitor","Mikrofon","Printer"],1],
+ ["Elektr o‘chganda qaysi xotira ma’lumotni yo‘qotadi?",["RAM","SSD","Qattiq disk"],0],
+ ["Oshxona o‘xshatishida RAM nimaga o‘xshaydi?",["Ombor shkafi","Ish stoli","Muzlatgich"],1]];
+let score=0,done=0;
+const slides=[
+()=>`<h1>Kompyuter qurilmalari</h1><p class="sub">Kompyuter ma’lumotni qanday qabul qiladi, ko‘rsatadi va saqlaydi? 7 ta slaydda bilib oling. Strelka tugmalari bilan ham o‘ta olasiz.</p><div class="grid">${dev("⌨️","Kiritish","Kompyuterga buyruq beradi")}${dev("🖥️","Chiqarish","Natijani ko‘rsatadi")}${dev("💾","Saqlash","Ma’lumotni saqlab qo‘yadi")}</div>`,
+()=>`<h2>Kiritish qurilmalari</h2><p class="sub">Ular ma’lumot va buyruqni kompyuterga yuboradi.</p><div class="grid">${dev("⌨️","Klaviatura","Harf, raqam va buyruqlarni yozish uchun.")}${dev("🖱️","Sichqoncha","Ekrandagi kursorni boshqaradi, bosish bilan tanlaydi.")}${dev("🎤","Mikrofon","Ovozni kompyuterga uzatadi.")}${dev("📷","Veb-kamera","Tasvirni olib, video qo‘ng‘iroqda ishlatiladi.")}</div>`,
+()=>`<h2>Chiqarish qurilmalari</h2><p class="sub">Ular kompyuter ishining natijasini bizga ko‘rsatadi.</p><div class="grid">${dev("🖥️","Monitor","Matn, rasm va videoni ekranda ko‘rsatadi.")}${dev("🖨️","Printer","Matn va rasmni qog‘ozga chiqaradi.")}${dev("🔊","Karnay","Tovush va musiqani eshittiradi.")}</div>`,
+()=>`<h2>Saqlash qurilmalari</h2><p class="sub">Fayllar kompyuter o‘chganda ham shu yerda qoladi.</p><div class="grid">${dev("💽","Qattiq disk (HDD)","Katta hajmni arzon narxda saqlaydi, lekin sekinroq.")}${dev("⚡","SSD","Fayllarni juda tez yozadi va ochadi.")}${dev("🔌","Flesh-xotira","Fayllarni boshqa kompyuterga olib borish uchun.")}</div>`,
+()=>`<h2>RAM va SSD: oshxona misoli</h2><p class="sub">Ikkalasi ham xotira, lekin vazifasi boshqa.</p><div class="two"><div class="big"><div class="pic" aria-hidden="true">🍳</div><h3>RAM = ish stoli</h3><p>Hozir pishirayotgan masalliqlar stol ustida turadi. Qo‘lingiz tez yetadi.</p><p>Stol kichik. Oshxonaga elektr o‘chsa, stol tozalanadi.</p></div><div class="big"><div class="pic" aria-hidden="true">🗄️</div><h3>SSD = ombor shkafi</h3><p>Barcha mahsulotlar shu yerda saqlanadi. Joyi katta.</p><p>Elektr o‘chsa ham mahsulotlar joyida qoladi.</p></div></div>`,
+()=>`<h2>Eng tezdan eng sekinga</h2><p class="sub">Ma’lumotni o‘qish tezligi bo‘yicha tartib (taxminiy).</p><div class="big">${[["1. RAM","100%"],["2. SSD","70%"],["3. Qattiq disk","35%"],["4. Flesh-xotira","20%"]].map(r=>`<div class="row"><em>${r[0]}</em><div class="t"><i style="--w:${r[1]}"></i></div></div>`).join("")}</div>`,
+()=>`<h2>Mini-viktorina</h2><div class="score" id="sc"></div>${Q.map((q,i)=>`<div class="q" data-i="${i}"><p>${i+1}. ${q[0]}</p>${q[1].map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join("")}</div>`).join("")}`
+];
+let n=0;const $=id=>document.getElementById(id);
+function render(){
+ const s=$("s");s.style.animation="none";s.offsetHeight;s.style.animation="";
+ s.innerHTML=slides[n]();
+ $("p").style.width=((n+1)/slides.length*100)+"%";$("c").textContent=(n+1)+" / "+slides.length;
+ $("prev").disabled=n===0;$("next").disabled=n===slides.length-1;
+ if(n===slides.length-1){score=0;done=0;}
+}
+$("s").addEventListener("click",e=>{
+ const b=e.target.closest(".opt");if(!b)return;
+ const q=b.parentElement,i=+q.dataset.i,j=+b.dataset.j,right=Q[i][2];
+ q.querySelectorAll(".opt").forEach((o,k)=>{o.disabled=true;if(k===right)o.classList.add("ok");});
+ if(j===right)score++;else b.classList.add("bad");
+ done++;
+ if(done===Q.length)$("sc").textContent="Natija: "+score+" / "+Q.length+(score===Q.length?" — Barakalla!":"");
+});
+$("prev").onclick=()=>{if(n>0){n--;render();}};
+$("next").onclick=()=>{if(n<slides.length-1){n++;render();}};
+addEventListener("keydown",e=>{if(e.key==="ArrowRight")$("next").click();if(e.key==="ArrowLeft")$("prev").click();});
+render();
+</script>
+</body>
+</html>
